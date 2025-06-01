@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -113,7 +114,7 @@
     <!-- Pantalla final -->
     <div id="final" class="pantalla">
       <h1>Gracias por participar</h1>
-      <p>Has terminado el juego. Esperamos que ahora sepas identificar mejor las fuentes confiables.</p>
+      <p id="resumenFinal"></p>
     </div>
   </div>
 
@@ -132,10 +133,13 @@
     ];
 
     let indice = 0;
+    let correctas = 0;
 
     function empezarJuego() {
       document.getElementById("inicio").style.display = "none";
       document.getElementById("juego").style.display = "block";
+      indice = 0;
+      correctas = 0;
       mostrarFuente();
     }
 
@@ -151,6 +155,7 @@
 
       if (eleccionUsuario === actual.confiable) {
         resultado.innerHTML = "? Correcto. " + actual.explicacion;
+        correctas++;
       } else {
         resultado.innerHTML = "? Incorrecto. " + actual.explicacion;
       }
@@ -161,12 +166,21 @@
         if (indice < fuentes.length) {
           mostrarFuente();
         } else {
-          document.getElementById("juego").style.display = "none";
-          document.getElementById("final").style.display = "block";
+          mostrarFinal();
         }
       }, 4000);
+    }
+
+    function mostrarFinal() {
+      document.getElementById("juego").style.display = "none";
+      document.getElementById("final").style.display = "block";
+      const total = fuentes.length;
+      const porcentaje = Math.round((correctas / total) * 100);
+      document.getElementById("resumenFinal").innerHTML =
+        `Respondiste correctamente ${correctas} de ${total} ejercicios. <br><br>` +
+        `Tu porcentaje de efectividad fue <strong>${porcentaje}%</strong>. <br><br>` +
+        `?? Gracias por participar en este ejercicio de aprendizaje sobre desinformacion politica.`;
     }
   </script>
 </body>
 </html>
-
