@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Es esta fuente confiable</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      max-width: 700px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .source-box {
+      background-color: white;
+      color: black;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .fuente {
+      font-style: italic;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-confiable {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-no-confiable {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .btn-empezar {
+      background-color: #2196f3;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .respuesta {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    .pantalla {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Pantalla de bienvenida -->
+    <div id="inicio">
+      <h1>Bienvenido</h1>
+      <p>Este es un juego para practicar si una fuente es confiable o no.</p>
+      <button class="btn-empezar" onclick="empezarJuego()">Empezar</button>
+    </div>
+
+    <!-- Juego -->
+    <div id="juego" class="pantalla">
+      <h1>Es esta fuente confiable</h1>
+      <div class="source-box" id="fuenteActual">
+        <div id="textoFuente">Cargando...</div>
+        <div class="fuente" id="fuenteLink"></div>
+      </div>
+      <button class="btn-confiable" onclick="evaluarFuente(true)">Confiable</button>
+      <button class="btn-no-confiable" onclick="evaluarFuente(false)">No confiable</button>
+      <div class="respuesta" id="resultado"></div>
+    </div>
+
+    <!-- Pantalla final -->
+    <div id="final" class="pantalla">
+      <h1>Gracias por participar</h1>
+      <p>Has terminado el juego. Esperamos que ahora sepas identificar mejor las fuentes confiables.</p>
+    </div>
+  </div>
+
+  <script>
+    const fuentes = [
+      { texto: "Un meme dice que un candidato quitara la educacion publica si gana.", fuente: "Cadena de WhatsApp", confiable: false, explicacion: "No es confiable: no hay pruebas ni fuentes reales." },
+      { texto: "El Ministerio del Interior publico cambios para votar.", fuente: "mininterior.gov.co", confiable: true, explicacion: "Si es confiable: es un sitio oficial del gobierno." },
+      { texto: "Una cuenta anonima dice que otro pais controlo las elecciones.", fuente: "@noticiaslibresanonimo", confiable: false, explicacion: "No es confiable: no hay verificacion ni evidencia." },
+      { texto: "Un portal serio publico un informe sobre las campañas politicas.", fuente: "lasillavacia.com", confiable: true, explicacion: "Si es confiable: medio conocido y profesional." },
+      { texto: "Una imagen editada muestra una frase de un candidato sin prueba.", fuente: "Publicacion en Facebook", confiable: false, explicacion: "No es confiable: imagen manipulada sin contexto." },
+      { texto: "Un sitio oficial publico los resultados de las elecciones.", fuente: "registraduria.gov.co", confiable: true, explicacion: "Si es confiable: es una fuente oficial del estado." },
+      { texto: "Una cadena de voz dice que no se puede votar con cedula digital.", fuente: "Nota de voz en WhatsApp", confiable: false, explicacion: "No es confiable: no hay respaldo oficial." },
+      { texto: "El portal ColombiaCheck analiza un rumor y lo desmiente con pruebas.", fuente: "colombiacheck.com", confiable: true, explicacion: "Si es confiable: se dedica a verificar noticias falsas." },
+      { texto: "Una cuenta publica que el gobierno va a cerrar los colegios privados.", fuente: "Twitter no verificado", confiable: false, explicacion: "No es confiable: sin fuente clara ni evidencia." },
+      { texto: "El medio El Espectador explica como se hace el escrutinio de votos.", fuente: "elespectador.com", confiable: true, explicacion: "Si es confiable: medio tradicional con verificacion editorial." }
+    ];
+
+    let indice = 0;
+
+    function empezarJuego() {
+      document.getElementById("inicio").style.display = "none";
+      document.getElementById("juego").style.display = "block";
+      mostrarFuente();
+    }
+
+    function mostrarFuente() {
+      const actual = fuentes[indice];
+      document.getElementById("textoFuente").innerText = actual.texto;
+      document.getElementById("fuenteLink").innerText = "Fuente: " + actual.fuente;
+    }
+
+    function evaluarFuente(eleccionUsuario) {
+      const actual = fuentes[indice];
+      const resultado = document.getElementById("resultado");
+
+      if (eleccionUsuario === actual.confiable) {
+        resultado.innerHTML = "? Correcto. " + actual.explicacion;
+      } else {
+        resultado.innerHTML = "? Incorrecto. " + actual.explicacion;
+      }
+
+      setTimeout(() => {
+        resultado.innerHTML = "";
+        indice++;
+        if (indice < fuentes.length) {
+          mostrarFuente();
+        } else {
+          document.getElementById("juego").style.display = "none";
+          document.getElementById("final").style.display = "block";
+        }
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
+
